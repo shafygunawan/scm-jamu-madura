@@ -3,7 +3,12 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\PasswordController;
+use App\Http\Controllers\DistributionController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\ProductionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 Route::permanentRedirect('/', '/dashboard');
@@ -36,63 +41,40 @@ Route::middleware('auth')->group(function () {
     // Modul Manajemen Users
     Route::get('/users', function () {
         return view('users.index');
-    })->name('users.index');
+    })->name('users.index')->middleware('role:Admin');
     Route::get('/users/create', function () {
         return view('users.create');
-    })->name('users.create');
+    })->name('users.create')->middleware('role:Admin');
     Route::get('/users/{id}/edit', function ($id) {
         return view('users.edit', ['id' => $id]);
-    })->name('users.edit');
+    })->name('users.edit')->middleware('role:Admin');
 
     // Modul Manajemen Supplier & Evaluasi WSM
-    Route::get('/suppliers', function () {
-        return view('suppliers.index');
-    })->name('suppliers.index');
-    Route::get('/suppliers/create', function () {
-        return view('suppliers.create');
-    })->name('suppliers.create');
-    Route::get('/suppliers/{id}/edit', function ($id) {
-        return view('suppliers.edit', ['id' => $id]);
-    })->name('suppliers.edit');
-    Route::get('/suppliers/katalog', function () {
-        return view('suppliers.katalog');
-    })->name('suppliers.katalog');
+    Route::get('/suppliers', [SupplierController::class, 'index'])->name('suppliers.index')->middleware('role:Admin|Manager');
+    Route::get('/suppliers/create', [SupplierController::class, 'create'])->name('suppliers.create')->middleware('role:Admin|Manager');
+    Route::get('/suppliers/{id}/edit', [SupplierController::class, 'edit'])->name('suppliers.edit')->middleware('role:Admin|Manager');
+    Route::get('/suppliers/katalog', [SupplierController::class, 'katalog'])->name('suppliers.katalog')->middleware('role:Admin|Manager');
+    Route::post('/suppliers/{id}/preferred', [SupplierController::class, 'setPreferred'])->name('suppliers.preferred')->middleware('role:Admin|Manager');
 
     // Modul Manajemen Produksi
-    Route::get('/productions', function () {
-        return view('productions.index');
-    })->name('productions.index');
-    Route::get('/productions/create', function () {
-        return view('productions.create');
-    })->name('productions.create');
-    Route::get('/productions/{id}/edit', function ($id) {
-        return view('productions.edit', ['id' => $id]);
-    })->name('productions.edit');
+    Route::get('/productions', [ProductionController::class, 'index'])->name('productions.index')->middleware('role:Admin|Manager|Produksi');
+    Route::get('/productions/create', [ProductionController::class, 'create'])->name('productions.create')->middleware('role:Admin|Manager|Produksi');
+    Route::get('/productions/{id}/edit', [ProductionController::class, 'edit'])->name('productions.edit')->middleware('role:Admin|Manager|Produksi');
+    Route::post('/productions', [ProductionController::class, 'store'])->name('productions.store')->middleware('role:Admin|Manager|Produksi');
 
     // Modul Manajemen Gudang / Inventaris
-    Route::get('/inventories', function () {
-        return view('inventories.index');
-    })->name('inventories.index');
-    Route::get('/inventories/receive', function () {
-        return view('inventories.receive');
-    })->name('inventories.receive');
-    Route::get('/inventories/product/create', function () {
-        return view('inventories.product_create');
-    })->name('inventories.product.create');
+    Route::get('/inventories', [InventoryController::class, 'index'])->name('inventories.index')->middleware('role:Admin|Manager|Gudang');
+    Route::get('/inventories/receive', [InventoryController::class, 'receive'])->name('inventories.receive')->middleware('role:Admin|Manager|Gudang');
+    Route::post('/inventories/receive', [InventoryController::class, 'storeReceive'])->name('inventories.receive.store')->middleware('role:Admin|Manager|Gudang');
+    Route::get('/inventories/product/create', [InventoryController::class, 'productCreate'])->name('inventories.product.create')->middleware('role:Admin|Manager|Gudang');
 
     // Modul Distribusi
-    Route::get('/distributions', function () {
-        return view('distributions.index');
-    })->name('distributions.index');
-    Route::get('/distributions/create', function () {
-        return view('distributions.create');
-    })->name('distributions.create');
-    Route::get('/distributions/distributor/create', function () {
-        return view('distributions.distributor_create');
-    })->name('distributions.distributor.create');
+    Route::get('/distributions', [DistributionController::class, 'index'])->name('distributions.index')->middleware('role:Admin|Manager|Distributor');
+    Route::get('/distributions/create', [DistributionController::class, 'create'])->name('distributions.create')->middleware('role:Admin|Manager|Distributor');
+    Route::post('/distributions', [DistributionController::class, 'storeShipment'])->name('distributions.store')->middleware('role:Admin|Manager|Distributor');
+    Route::get('/distributions/distributor/create', [DistributionController::class, 'distributorCreate'])->name('distributions.distributor.create')->middleware('role:Admin|Manager|Distributor');
 
     // Modul Pelaporan
-    Route::get('/reports', function () {
-        return view('reports.index');
-    })->name('reports.index');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index')->middleware('role:Admin|Manager');
+    Route::get('/reports/export', [ReportController::class, 'exportPdf'])->name('reports.export')->middleware('role:Admin|Manager');
 });

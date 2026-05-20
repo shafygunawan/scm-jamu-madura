@@ -24,6 +24,7 @@ class User extends Authenticatable
         'Gudang',
         'Distributor',
     ];
+
     /**
      * Get the attributes that should be cast.
      *

@@ -15,12 +15,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            \Database\Seeders\UserSeeder::class,
-            \Database\Seeders\SupplierSeeder::class,
-            \Database\Seeders\RawMaterialSeeder::class,
-            \Database\Seeders\ProductSeeder::class,
-            \Database\Seeders\DistributorSeeder::class,
-            \Database\Seeders\EvaluationCriteriaSeeder::class,
+            UserSeeder::class,
+            SupplierSeeder::class,
+            RawMaterialSeeder::class,
+            ProductSeeder::class,
+            DistributorSeeder::class,
+            EvaluationCriteriaSeeder::class,
         ]);
     }
 }

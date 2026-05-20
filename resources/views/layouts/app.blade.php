@@ -97,6 +97,21 @@
 
                     <!-- Settings Dropdown -->
                     <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                        @php
+                            use App\Models\RawMaterial;
+                            $threshold = config('inventory.low_stock_threshold', 10);
+                            $lowCount = auth()->check() ? RawMaterial::where('stok', '<', $threshold)->count() : 0;
+                        @endphp
+                        @if ($lowCount > 0)
+                            <div class="me-4 flex items-center">
+                                <a href="{{ route('inventories.index') }}"
+                                    class="relative inline-flex items-center rounded-md bg-yellow-100 px-3 py-2 text-yellow-800">
+                                    Stok rendah
+                                    <span
+                                        class="ms-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-yellow-600 text-xs text-white">{{ $lowCount }}</span>
+                                </a>
+                            </div>
+                        @endif
                         <div class="relative" x-data="{ open: false }" @click.outside="open = false"
                             @close.stop="open = false">
                             <div @click="open = ! open">

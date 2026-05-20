@@ -83,48 +83,54 @@
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                                <tr>
-                                    <td
-                                        class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                                        PT Agro Madura</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                                        08123456789</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                                        85.4</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">1
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <span
-                                            class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                            Preferred
-                                        </span>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-                                        <a href="{{ route('suppliers.edit', 1) }}"
-                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td
-                                        class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                                        CV Jamu Alami</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                                        08987654321</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                                        72.1</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">2
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <span
-                                            class="inline-flex rounded-full bg-gray-100 px-2 text-xs font-semibold leading-5 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
-                                            Reguler
-                                        </span>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
-                                        <a href="{{ route('suppliers.edit', 2) }}"
-                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Edit</a>
-                                    </td>
-                                </tr>
+                                @foreach ($suppliers as $supplier)
+                                    @php
+                                        $meta = $scores->get($supplier->id) ?? null;
+                                        $score = $meta['score'] ?? null;
+                                        $rank = $meta['rank'] ?? null;
+                                    @endphp
+                                    <tr>
+                                        <td
+                                            class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                                            {{ $supplier->nama }}</td>
+                                        <td
+                                            class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $supplier->kontak }}</td>
+                                        <td
+                                            class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $score ? number_format($score * 100, 2) : '-' }}</td>
+                                        <td
+                                            class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $rank ?? '-' }}</td>
+                                        <td class="whitespace-nowrap px-6 py-4">
+                                            @if ($supplier->preferred)
+                                                <span
+                                                    class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 dark:bg-green-900 dark:text-green-200">Preferred</span>
+                                            @else
+                                                <span
+                                                    class="inline-flex rounded-full bg-gray-100 px-2 text-xs font-semibold leading-5 text-gray-800 dark:bg-gray-700 dark:text-gray-300">Reguler</span>
+                                            @endif
+                                        </td>
+                                        <td class="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
+                                            <a href="{{ route('suppliers.edit', $supplier->id) }}"
+                                                class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Edit</a>
+                                            @if (auth()->check() && in_array(auth()->user()->role, ['Admin', 'Manager']))
+                                                <form action="{{ route('suppliers.preferred', $supplier->id) }}"
+                                                    method="POST" class="ms-2 inline-block">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="text-sm text-amber-600 hover:underline">
+                                                        @if ($supplier->preferred)
+                                                            Unset Preferred
+                                                        @else
+                                                            Set Preferred
+                                                        @endif
+                                                    </button>
+                                                </form>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

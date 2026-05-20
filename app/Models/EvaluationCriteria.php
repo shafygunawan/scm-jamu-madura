@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class EvaluationCriteria extends Model
 {
     use HasFactory;
+
     /**
      * Explicit table name because "criteria" is already plural.
      * Eloquent's pluralizer would create 'evaluation_criterias' otherwise.
