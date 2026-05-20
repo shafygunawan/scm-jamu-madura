@@ -36,43 +36,43 @@
                                     <th scope="col"
                                         class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
                                         Status</th>
+                                    <th scope="col"
+                                        class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500 dark:text-gray-300">
+                                        Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
-                                <tr>
-                                    <td
-                                        class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                                        BCH-20260520-01</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">20
-                                        Mei 2026</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                                        Jamu Kunyit Asam</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">100
-                                        Liter</td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <span
-                                            class="inline-flex rounded-full bg-yellow-100 px-2 text-xs font-semibold leading-5 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                                            Sedang Diproses
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td
-                                        class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
-                                        BCH-20260519-02</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">19
-                                        Mei 2026</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
-                                        Jamu Beras Kencur</td>
-                                    <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">150
-                                        Liter</td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <span
-                                            class="inline-flex rounded-full bg-green-100 px-2 text-xs font-semibold leading-5 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                            Selesai
-                                        </span>
-                                    </td>
-                                </tr>
+                                @forelse ($batches as $batch)
+                                    <tr>
+                                        <td
+                                            class="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                                            {{ $batch->id }}</td>
+                                        <td
+                                            class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                            {{ optional($batch->tanggal)->format('d M Y') }}</td>
+                                        <td
+                                            class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $batch->product->nama ?? '-' }}</td>
+                                        <td
+                                            class="whitespace-nowrap px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $batch->jumlah }} {{ __('units') }}</td>
+                                        <td class="whitespace-nowrap px-6 py-4">
+                                            <span
+                                                class="inline-flex rounded-full bg-yellow-100 px-2 text-xs font-semibold leading-5 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                                                {{ $batch->status }}
+                                            </span>
+                                        </td>
+                                        <td class="whitespace-nowrap px-6 py-4">
+                                            <a href="{{ route('productions.edit', $batch) }}"
+                                                class="text-sm text-indigo-600 hover:underline">Edit</a>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-4 text-sm text-gray-500">No production batches
+                                            found.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

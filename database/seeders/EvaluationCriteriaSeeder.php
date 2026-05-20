@@ -10,10 +10,8 @@ class EvaluationCriteriaSeeder extends Seeder
     public function run(): void
     {
         $criteria = [
-            ['nama_kriteria' => 'Harga', 'tipe' => 'Cost', 'bobot' => 0.4],
-            ['nama_kriteria' => 'Kualitas', 'tipe' => 'Benefit', 'bobot' => 0.3],
-            ['nama_kriteria' => 'Lead Time', 'tipe' => 'Cost', 'bobot' => 0.2],
-            ['nama_kriteria' => 'Performa', 'tipe' => 'Benefit', 'bobot' => 0.1],
+            ['nama_kriteria' => 'Harga', 'tipe' => 'Cost', 'bobot' => 0.6667],
+            ['nama_kriteria' => 'Lead Time', 'tipe' => 'Cost', 'bobot' => 0.3333],
         ];
 
         foreach ($criteria as $c) {

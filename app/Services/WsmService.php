@@ -22,26 +22,26 @@ class WsmService
             return collect();
         }
 
-        $sumWeights = $criteria->sum('bobot') ?: 1;
+        $filteredCriteria = $criteria->filter(function ($criterion) use ($catalogs): bool {
+            $column = $this->columnNameFromCriterion($criterion->nama_kriteria);
 
-        // Prepare values per criterion
-        $valuesByCriterion = [];
-        foreach ($criteria as $c) {
-            $col = $this->columnNameFromCriterion($c->nama_kriteria);
-            $vals = $catalogs->map(fn ($cat) => $cat->{$col} ?? null)->filter()->values();
-            $valuesByCriterion[$c->id] = [
-                'criterion' => $c,
-                'values' => $vals,
-            ];
+            return $catalogs->contains(fn($catalog) => filled($catalog->{$column} ?? null));
+        })->values();
+
+        if ($filteredCriteria->isEmpty()) {
+            return collect();
         }
 
-        $results = $catalogs->map(function ($cat) use ($criteria, $valuesByCriterion, $sumWeights) {
+        // Recompute sum of weights using only available criteria
+        $sumWeights = $filteredCriteria->sum('bobot') ?: 1;
+
+        $results = $catalogs->map(function ($cat) use ($filteredCriteria, $catalogs, $sumWeights) {
             $score = 0.0;
 
-            foreach ($criteria as $crit) {
+            foreach ($filteredCriteria as $crit) {
                 $col = $this->columnNameFromCriterion($crit->nama_kriteria);
                 $val = $cat->{$col} ?? 0;
-                $vals = $valuesByCriterion[$crit->id]['values'] ?? collect();
+                $vals = $catalogs->map(fn($catalog) => $catalog->{$col} ?? null)->filter()->values();
 
                 if ($vals->isEmpty()) {
                     $norm = 0;

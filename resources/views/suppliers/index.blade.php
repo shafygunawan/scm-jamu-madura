@@ -8,6 +8,9 @@
                 <a href="{{ route('wsm-criteria.index') }}"
                     class="inline-block rounded-md bg-amber-600 px-4 py-2 text-white transition hover:bg-amber-700">Kelola
                     Kriteria WSM</a>
+                <a href="{{ route('suppliers.katalog') }}"
+                    class="inline-block rounded-md bg-gray-600 px-4 py-2 text-white transition hover:bg-gray-700">Lihat
+                    Katalog</a>
                 <a href="{{ route('suppliers.create') }}"
                     class="inline-block rounded-md bg-indigo-600 px-4 py-2 text-white transition hover:bg-indigo-700">+
                     Tambah Supplier</a>

@@ -273,8 +273,12 @@
                                                 {{ $production->tanggal->format('d M Y') }} - Qty:
                                                 {{ $production->jumlah }}</p>
                                         </div>
-                                        <span
-                                            class="{{ $production->status === 'Dalam Proses' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' }} inline-flex items-center rounded-full px-3 py-1 text-xs font-medium">{{ $production->status }}</span>
+                                        <div class="flex items-center gap-3">
+                                            <a href="{{ route('productions.edit', $production) }}"
+                                                class="text-sm text-indigo-600 hover:underline">Edit</a>
+                                            <span
+                                                class="{{ $production->status === 'Dalam Proses' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' }} inline-flex items-center rounded-full px-3 py-1 text-xs font-medium">{{ $production->status }}</span>
+                                        </div>
                                     </div>
                                 @endforeach
                             </div>

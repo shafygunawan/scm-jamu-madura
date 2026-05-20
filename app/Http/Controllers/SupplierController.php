@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\EvaluationCriteria;
+use App\Models\MaterialSupplierCatalog;
 use App\Models\RawMaterial;
 use App\Models\Supplier;
 use App\Services\WsmService;
@@ -23,7 +24,7 @@ class SupplierController extends Controller
         $rawMaterialId = $request->query('raw_material_id');
         if ($rawMaterialId) {
             $rankings = $this->wsm->rankForRawMaterial((int) $rawMaterialId);
-            $scores = $rankings->mapWithKeys(fn($r, $i) => [$r->supplier->id => ['score' => $r->score, 'rank' => $i + 1]]);
+            $scores = $rankings->mapWithKeys(fn ($r, $i) => [$r->supplier->id => ['score' => $r->score, 'rank' => $i + 1]]);
         } else {
             $scores = collect();
         }
@@ -110,6 +111,10 @@ class SupplierController extends Controller
 
     public function katalog(Request $request): View
     {
-        return view('suppliers.katalog');
+        $catalog = MaterialSupplierCatalog::with(['supplier', 'rawMaterial'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('suppliers.katalog', compact('catalog'));
     }
 }
