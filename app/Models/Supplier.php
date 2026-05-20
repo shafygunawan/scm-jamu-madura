@@ -11,6 +11,13 @@ class Supplier extends Model
 {
     use HasFactory;
 
+    protected function casts(): array
+    {
+        return [
+            'preferred' => 'boolean',
+        ];
+    }
+
     public function catalogs()
     {
         return $this->hasMany(MaterialSupplierCatalog::class);

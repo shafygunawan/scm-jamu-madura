@@ -11,6 +11,13 @@ class ProductionBatch extends Model
 {
     use HasFactory;
 
+    protected function casts(): array
+    {
+        return [
+            'tanggal' => 'date',
+        ];
+    }
+
     public function product()
     {
         return $this->belongsTo(Product::class);

@@ -10,31 +10,32 @@
         <div class="mx-auto max-w-3xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="#" method="POST">
-                        <input type="hidden" name="id" value="{{ $id ?? '' }}">
+                    <form action="{{ route('productions.update', $production) }}" method="POST">
+                        @csrf
+                        @method('PUT')
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tanggal
-                                    Produksi</label>
-                                <input type="date" name="date" value="2026-05-20"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Produk</label>
+                                <input type="text" value="{{ $production->product?->nama ?? '-' }}" disabled
+                                    class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Produk
-                                    Target</label>
-                                <select name="product"
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Jumlah</label>
+                                <input type="text" value="{{ $production->jumlah }}" disabled
+                                    class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 shadow-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status
+                                    Batch</label>
+                                <select name="status"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
-                                    <option value="kunyit" selected>Jamu Kunyit Asam</option>
-                                    <option value="beras">Jamu Beras Kencur</option>
+                                    @foreach (['Diproses', 'Selesai', 'Dibatalkan'] as $status)
+                                        <option value="{{ $status }}" @selected(old('status', $production->status) === $status)>
+                                            {{ $status }}</option>
+                                    @endforeach
                                 </select>
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Jumlah Batch
-                                    (Liter)</label>
-                                <input type="number" name="quantity" value="100"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                             </div>
                         </div>
 

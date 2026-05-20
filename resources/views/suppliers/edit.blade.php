@@ -10,26 +10,39 @@
         <div class="mx-auto max-w-3xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="#" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="id" value="{{ $id ?? '' }}">
+                    <form action="{{ route('suppliers.update', $supplier) }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        @method('PUT')
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama
                                     Supplier</label>
-                                <input type="text" name="name" value="PT Agro Madura"
+                                <input type="text" name="nama" value="{{ old('nama', $supplier->nama) }}"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kontak</label>
-                                <input type="text" name="contact" value="08123456789"
+                                <input type="text" name="kontak" value="{{ old('kontak', $supplier->kontak) }}"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Alamat</label>
-                                <textarea name="address" rows="3"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">Jl. Contoh No.1</textarea>
+                                <textarea name="alamat" rows="3"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">{{ old('alamat', $supplier->alamat) }}</textarea>
+                            </div>
+
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Dokumen
+                                    Legalitas</label>
+                                <input type="file" name="dokumen_legal"
+                                    class="mt-1 block w-full text-sm text-gray-500 dark:text-gray-300">
+                                @if ($supplier->dokumen_legal)
+                                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">File saat ini:
+                                        {{ $supplier->dokumen_legal }}</p>
+                                @endif
                             </div>
                         </div>
 

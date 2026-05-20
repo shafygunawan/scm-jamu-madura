@@ -10,45 +10,29 @@
         <div class="mx-auto max-w-3xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="#" method="POST">
+                    <form action="{{ route('distributions.distributor.store') }}" method="POST">
+                        @csrf
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama
                                     Distributor</label>
-                                <input type="text" name="name" placeholder="Nama distributor"
+                                <input type="text" name="nama" value="{{ old('nama') }}"
+                                    placeholder="Nama distributor"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kontak</label>
-                                <input type="text" name="contact" placeholder="0812xxxxxxx"
+                                <input type="text" name="kontak" value="{{ old('kontak') }}"
+                                    placeholder="0812xxxxxxx"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
-                            </div>
-
-                            <div>
-                                <label
-                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Kota/Lokasi</label>
-                                <input type="text" name="city" placeholder="Kota"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tipe
-                                    Distributor</label>
-                                <select name="type"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
-                                    <option value="retail">Retail</option>
-                                    <option value="apotek">Apotek</option>
-                                    <option value="klinik">Klinik</option>
-                                    <option value="grosir">Grosir</option>
-                                </select>
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Alamat
                                     Lengkap</label>
-                                <textarea name="address" rows="2" placeholder="Alamat lengkap"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white"></textarea>
+                                <textarea name="alamat" rows="3" placeholder="Alamat lengkap"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">{{ old('alamat') }}</textarea>
                             </div>
                         </div>
 

@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex items-center justify-between">
             <h2 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
-                {{ isset($product) && $product->exists ? 'Edit Barang Jadi' : 'Tambah Barang Jadi' }}
+                {{ isset($rawMaterial) && $rawMaterial->exists ? 'Edit Bahan Baku' : 'Tambah Bahan Baku' }}
             </h2>
             <a href="{{ route('inventories.index') }}" class="text-sm text-gray-500 hover:underline">Kembali</a>
         </div>
@@ -13,26 +13,25 @@
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form
-                        action="{{ isset($product) && $product->exists ? route('inventories.products.update', $product) : route('inventories.products.store') }}"
+                        action="{{ isset($rawMaterial) && $rawMaterial->exists ? route('inventories.raw-materials.update', $rawMaterial) : route('inventories.raw-materials.store') }}"
                         method="POST">
                         @csrf
-                        @if (isset($product) && $product->exists)
+                        @if (isset($rawMaterial) && $rawMaterial->exists)
                             @method('PUT')
                         @endif
 
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama
-                                    Produk</label>
-                                <input type="text" name="nama" value="{{ old('nama', $product->nama ?? '') }}"
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Bahan
+                                    Baku</label>
+                                <input type="text" name="nama" value="{{ old('nama', $rawMaterial->nama ?? '') }}"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Jumlah
-                                    Stok</label>
-                                <input type="number" name="stok" min="0"
-                                    value="{{ old('stok', $product->stok ?? 0) }}"
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Stok</label>
+                                <input type="number" step="0.01" min="0" name="stok"
+                                    value="{{ old('stok', $rawMaterial->stok ?? 0) }}"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                             </div>
                         </div>

@@ -10,18 +10,21 @@
         <div class="mx-auto max-w-3xl sm:px-6 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
-                    <form action="#" method="POST">
+                    <form action="{{ route('users.store') }}" method="POST">
+                        @csrf
                         <div class="space-y-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama
                                     Lengkap</label>
-                                <input type="text" name="name" placeholder="Nama lengkap"
+                                <input type="text" name="name" value="{{ old('name') }}"
+                                    placeholder="Nama lengkap"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                             </div>
 
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                                <input type="email" name="email" placeholder="email@contoh.com"
+                                <input type="email" name="email" value="{{ old('email') }}"
+                                    placeholder="email@contoh.com"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                             </div>
 
@@ -36,9 +39,10 @@
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Role</label>
                                 <select name="role"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
-                                    <option>Admin</option>
-                                    <option>Manager</option>
-                                    <option>Staff</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role }}" @selected(old('role') === $role)>
+                                            {{ $role }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
