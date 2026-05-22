@@ -28,8 +28,9 @@ class ProductionController extends Controller
     {
         $rawMaterials = RawMaterial::query()->orderBy('nama', 'asc')->get();
         $products = Product::query()->orderBy('nama', 'asc')->get();
+        $threshold = config('inventory.low_stock_threshold', 10);
 
-        return view('productions.create', compact('rawMaterials', 'products'));
+        return view('productions.create', compact('rawMaterials', 'products', 'threshold'));
     }
 
     public function edit(ProductionBatch $production): View

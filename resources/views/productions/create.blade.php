@@ -7,8 +7,56 @@
     </x-slot>
 
     <div class="py-12">
-        <div class="mx-auto max-w-4xl sm:px-6 lg:px-8">
+        <div class="mx-auto grid max-w-7xl gap-6 sm:px-6 md:grid-cols-3 lg:px-8">
             <div class="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
+                <div class="mb-4 flex items-center justify-between p-6 text-gray-900 dark:text-gray-100">
+                    <h3 class="text-lg font-medium">Stok Bahan Baku</h3>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-300">
+                                    Nama Bahan</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-300">
+                                    Stok Tersedia</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-300">
+                                    Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white dark:divide-gray-700 dark:bg-gray-800">
+                            @forelse ($rawMaterials as $rawMaterial)
+                                <tr>
+                                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                                        {{ $rawMaterial->nama }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                        {{ $rawMaterial->stok }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                        @if (($rawMaterial->stok ?? 0) < $threshold)
+                                            <span
+                                                class="rounded-full bg-red-100 px-2 text-xs font-semibold text-red-800 dark:bg-red-900/30 dark:text-red-200">Kritis</span>
+                                        @else
+                                            <span
+                                                class="rounded-full bg-green-100 px-2 text-xs font-semibold text-green-800 dark:bg-green-900/30 dark:text-green-200">Aman</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4"
+                                        class="px-6 py-10 text-center text-sm text-gray-500 dark:text-gray-400">Belum
+                                        ada bahan baku.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-span-2 overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form action="{{ route('productions.store') }}" method="POST" x-data="{ items: [{ id: '', qty: 1 }] }">
                         @csrf
@@ -18,6 +66,14 @@
                                     Produksi</label>
                                 <input type="date" name="tanggal" value="{{ old('tanggal', now()->toDateString()) }}"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+
+                                @if ($errors->get('tanggal'))
+                                    <ul class="mt-2 space-y-1 text-sm text-red-600 dark:text-red-400">
+                                        @foreach ((array) $errors->get('tanggal') as $message)
+                                            <li>{{ $message }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
                             </div>
 
                             <div>
@@ -31,6 +87,14 @@
                                             {{ $product->nama }}</option>
                                     @endforeach
                                 </select>
+
+                                @if ($errors->get('product_id'))
+                                    <ul class="mt-2 space-y-1 text-sm text-red-600 dark:text-red-400">
+                                        @foreach ((array) $errors->get('product_id') as $message)
+                                            <li>{{ $message }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
                             </div>
 
                             <div>
@@ -38,6 +102,14 @@
                                     (Unit)</label>
                                 <input type="number" name="quantity" value="{{ old('quantity', 1) }}" min="1"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+
+                                @if ($errors->get('quantity'))
+                                    <ul class="mt-2 space-y-1 text-sm text-red-600 dark:text-red-400">
+                                        @foreach ((array) $errors->get('quantity') as $message)
+                                            <li>{{ $message }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
                             </div>
 
                             <div>
@@ -48,6 +120,14 @@
                                     <option value="Diproses">Diproses</option>
                                     <option value="Selesai">Selesai</option>
                                 </select>
+
+                                @if ($errors->get('status'))
+                                    <ul class="mt-2 space-y-1 text-sm text-red-600 dark:text-red-400">
+                                        @foreach ((array) $errors->get('status') as $message)
+                                            <li>{{ $message }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
                             </div>
 
                             <div class="space-y-3">
@@ -57,6 +137,14 @@
                                     <button type="button" @click="items.push({ id: '', qty: 1 })"
                                         class="text-sm text-indigo-600 hover:underline">+ Tambah bahan</button>
                                 </div>
+
+                                @if ($errors->get('raw_materials'))
+                                    <ul class="mt-2 space-y-1 text-sm text-red-600 dark:text-red-400">
+                                        @foreach ((array) $errors->get('raw_materials') as $message)
+                                            <li>{{ $message }}</li>
+                                        @endforeach
+                                    </ul>
+                                @endif
 
                                 <template x-for="(item, index) in items" :key="index">
                                     <div class="grid grid-cols-1 gap-3 md:grid-cols-12">
