@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductionBatch;
 use App\Models\RawMaterial;
+use App\Services\InventoryStockService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,8 @@ use Illuminate\View\View;
 
 class ProductionController extends Controller
 {
+    public function __construct(private InventoryStockService $stockService) {}
+
     public function index(): View
     {
         $batches = ProductionBatch::with('product')
@@ -53,22 +56,7 @@ class ProductionController extends Controller
 
         DB::transaction(function () use ($data): void {
             $product = Product::query()->lockForUpdate()->findOrFail($data['product_id']);
-            $requirements = collect($data['raw_materials']);
-            $rawMaterials = RawMaterial::query()->whereIn('id', $requirements->pluck('id')->all(), 'and', false)->lockForUpdate()->get()->keyBy('id');
-
-            foreach ($requirements as $requirement) {
-                $rawMaterial = $rawMaterials->get($requirement['id']);
-
-                if (! $rawMaterial || ($rawMaterial->stok ?? 0) < $requirement['qty']) {
-                    throw ValidationException::withMessages([
-                        'raw_materials' => 'Stok bahan baku tidak mencukupi.',
-                    ]);
-                }
-            }
-
-            foreach ($requirements as $requirement) {
-                $rawMaterials->get($requirement['id'])->decrement('stok', $requirement['qty']);
-            }
+            $this->stockService->consumeRawMaterialsForProduction($data['raw_materials']);
 
             $product->increment('stok', $data['quantity']);
 

@@ -84,6 +84,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/inventories/raw-materials/create', [InventoryController::class, 'rawMaterialCreate'])->name('inventories.raw-materials.create')->middleware('role:Admin|Manager|Gudang');
     Route::post('/inventories/raw-materials', [InventoryController::class, 'rawMaterialStore'])->name('inventories.raw-materials.store')->middleware('role:Admin|Manager|Gudang');
     Route::get('/inventories/raw-materials/{rawMaterial}/edit', [InventoryController::class, 'rawMaterialEdit'])->name('inventories.raw-materials.edit')->middleware('role:Admin|Manager|Gudang');
+    Route::get('/inventories/raw-materials/{rawMaterial}/stock', [InventoryController::class, 'rawMaterialStock'])->name('inventories.raw-materials.stock')->middleware('role:Admin|Manager|Gudang');
+    Route::post('/inventories/raw-materials/{rawMaterial}/condition-adjustments', [InventoryController::class, 'storeRawMaterialConditionAdjustment'])->name('inventories.raw-materials.condition-adjustments.store')->middleware('role:Admin|Manager|Gudang');
     Route::put('/inventories/raw-materials/{rawMaterial}', [InventoryController::class, 'rawMaterialUpdate'])->name('inventories.raw-materials.update')->middleware('role:Admin|Manager|Gudang');
     Route::delete('/inventories/raw-materials/{rawMaterial}', [InventoryController::class, 'rawMaterialDestroy'])->name('inventories.raw-materials.destroy')->middleware('role:Admin|Manager|Gudang');
 
@@ -97,6 +99,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/distributions/distributors/{distributor}', [DistributionController::class, 'distributorUpdate'])->name('distributions.distributor.update')->middleware('role:Admin|Manager|Distributor');
     Route::delete('/distributions/distributors/{distributor}', [DistributionController::class, 'distributorDestroy'])->name('distributions.distributor.destroy')->middleware('role:Admin|Manager|Distributor');
     Route::get('/distributions/{shipment}/edit', [DistributionController::class, 'edit'])->name('distributions.edit')->middleware('role:Admin|Manager|Distributor');
+    Route::get('/distributions/{shipment}/items', [DistributionController::class, 'shipmentItems'])->name('distributions.items')->middleware('role:Admin|Manager|Distributor');
     Route::put('/distributions/{shipment}', [DistributionController::class, 'updateShipment'])->name('distributions.update')->middleware('role:Admin|Manager|Distributor');
 
     // Modul Pelaporan

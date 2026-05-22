@@ -54,7 +54,13 @@
                                     Nama Bahan</th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-300">
-                                    Stok Tersedia</th>
+                                    Stok Total</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-300">
+                                    Stok Baik</th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-300">
+                                    Stok Rusak</th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium uppercase text-gray-500 dark:text-gray-300">
                                     Status</th>
@@ -69,6 +75,10 @@
                                     <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                                         {{ $rawMaterial->stok }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                        {{ $rawMaterial->stok_baik }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                                        {{ $rawMaterial->stok_rusak }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
                                         @if (($rawMaterial->stok ?? 0) < $threshold)
                                             <span
                                                 class="rounded-full bg-red-100 px-2 text-xs font-semibold text-red-800 dark:bg-red-900/30 dark:text-red-200">Kritis</span>
@@ -78,8 +88,11 @@
                                         @endif
                                     </td>
                                     <td class="px-6 py-4 text-right text-sm font-medium">
+                                        <a href="{{ route('inventories.raw-materials.stock', $rawMaterial) }}"
+                                            class="text-emerald-600 hover:text-emerald-900 dark:text-emerald-400 dark:hover:text-emerald-300">Lihat
+                                            Stok</a>
                                         <a href="{{ route('inventories.raw-materials.edit', $rawMaterial) }}"
-                                            class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Edit</a>
+                                            class="ms-3 text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Edit</a>
                                         <form action="{{ route('inventories.raw-materials.destroy', $rawMaterial) }}"
                                             method="POST" class="ms-3 inline-block"
                                             onsubmit="return confirm('Hapus bahan baku ini?')">
@@ -92,7 +105,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4"
+                                    <td colspan="6"
                                         class="px-6 py-10 text-center text-sm text-gray-500 dark:text-gray-400">Belum
                                         ada bahan baku.</td>
                                 </tr>

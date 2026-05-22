@@ -14,6 +14,19 @@
                         @csrf
                         <div class="space-y-4">
                             <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Supplier
+                                    Asal</label>
+                                <select name="supplier_id"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                                    <option value="">-- Pilih Supplier --</option>
+                                    @foreach ($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}" @selected(old('supplier_id') == $supplier->id)>
+                                            {{ $supplier->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Bahan
                                     Baku</label>
                                 <select name="raw_material_id"
@@ -27,12 +40,33 @@
                             </div>
 
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Jumlah
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Tanggal
                                     Penerimaan</label>
-                                <input type="number" step="0.01" min="0.01" name="quantity"
-                                    value="{{ old('quantity', 1) }}"
+                                <input type="date" name="received_at"
+                                    value="{{ old('received_at', now()->toDateString()) }}"
                                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
                             </div>
+
+                            <div class="grid gap-4 md:grid-cols-2">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Stok
+                                        Baik</label>
+                                    <input type="number" step="0.01" min="0" name="good_quantity"
+                                        value="{{ old('good_quantity', 1) }}"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Stok
+                                        Rusak</label>
+                                    <input type="number" step="0.01" min="0" name="damaged_quantity"
+                                        value="{{ old('damaged_quantity', 0) }}"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:border-gray-600 dark:bg-gray-700 dark:text-white">
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-gray-500 dark:text-gray-400">
+                                Total stok penerimaan dihitung dari stok baik + stok rusak.
+                            </p>
                         </div>
 
                         <div class="mt-6 flex justify-end gap-3">

@@ -54,6 +54,10 @@
             margin: 0 0 8px;
             font-size: 16px;
         }
+
+        .muted {
+            color: #6b7280;
+        }
     </style>
 </head>
 
@@ -61,6 +65,7 @@
     <div class="header">
         <p class="title">Laporan SCM Jamu Madura</p>
         <p class="subtitle">Jenis laporan: {{ ucfirst($type) }}</p>
+        <p class="subtitle">Tanggal laporan dibuat: {{ $generatedAt->format('d-m-Y H:i') }}</p>
     </div>
 
     @if ($type === 'inventory')
@@ -71,7 +76,9 @@
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
-                        <th>Stok</th>
+                        <th>Total</th>
+                        <th>Baik</th>
+                        <th>Rusak</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -80,10 +87,41 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $rawMaterial->nama }}</td>
                             <td>{{ $rawMaterial->stok }}</td>
+                            <td>{{ $rawMaterial->stok_baik }}</td>
+                            <td>{{ $rawMaterial->stok_rusak }}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="5">
+                                <strong>Stok per supplier</strong>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Supplier</th>
+                                            <th>Stok Baik</th>
+                                            <th>Stok Rusak</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse (($rawMaterialBreakdowns[$rawMaterial->id] ?? collect()) as $breakdown)
+                                            <tr>
+                                                <td>{{ $breakdown['supplier_name'] }}</td>
+                                                <td>{{ $breakdown['good_quantity'] }}</td>
+                                                <td>{{ $breakdown['damaged_quantity'] }}</td>
+                                                <td>{{ $breakdown['total_quantity'] }}</td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4">Tidak ada penerimaan untuk bahan baku ini.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3">Tidak ada data bahan baku.</td>
+                            <td colspan="5">Tidak ada data bahan baku.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -156,6 +194,7 @@
                         <th>Distributor</th>
                         <th>Status Pengiriman</th>
                         <th>Status Pembayaran</th>
+                        <th>Item</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -166,10 +205,15 @@
                             <td>{{ $shipment->distributor?->nama ?? '-' }}</td>
                             <td>{{ $shipment->status }}</td>
                             <td>{{ $shipment->status_pembayaran }}</td>
+                            <td>
+                                @foreach ($shipment->items as $item)
+                                    <div>{{ $item->product?->nama ?? '-' }}: {{ $item->quantity }}</div>
+                                @endforeach
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5">Tidak ada data pengiriman.</td>
+                            <td colspan="6">Tidak ada data pengiriman.</td>
                         </tr>
                     @endforelse
                 </tbody>
